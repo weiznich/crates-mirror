@@ -1,0 +1,17 @@
+[package]
+authors = ["Georg Semmler <georg_semmler_05@web.de>"]
+name = "crates-mirror"
+version = "0.1.0"
+
+[dependencies]
+clap = "2.9.2"
+curl = "0.3"
+env_logger = "0.3.4"
+git2 = "0.3"
+iron = "0.3"
+log = "0.3.6"
+router = "0.1.1"
+rustc-serialize = "0.3"
+sha2 = "0.1.2"
+toml = "0.1"
+clippy = {version= "0.0.68", optional = true}

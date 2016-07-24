@@ -372,7 +372,7 @@ fn main() {
 }
 
 
-pub fn credentials(url: &str,
+pub fn credentials(_url: &str,
                    user_from_url: Option<&str>,
                    _cred: git2::CredentialType)
                    -> Result<git2::Cred, git2::Error> {

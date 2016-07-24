@@ -1,0 +1,14 @@
+sudo: false
+language: rust
+rust:
+  - nightly
+  - beta
+  - stable
+script:
+  - cargo build --verbose
+addons:
+  apt:
+    sources:
+        - kalakris-cmake
+    packages:
+        - cmake

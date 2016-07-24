@@ -1,4 +1,6 @@
 # crates-mirror
+[![Build Status](https://travis-ci.org/weiznich/crates-mirror.svg?branch=master)](https://travis-ci.org/weiznich/crates-mirror)
+
 
 Crates-Mirror is a simple tool to provide a caching mirror for [crates.io](https://crates.io/). It's serving a local index which is synced with a remote index. All requested crates are downloaded and cached localy for further usage.
 

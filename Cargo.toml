@@ -2,6 +2,9 @@
 authors = ["Georg Semmler <georg_semmler_05@web.de>"]
 name = "crates-mirror"
 version = "0.1.0"
+license = "MIT/Apache-2.0"
+description = "Crates.io mirror"
+repository = "https://github.com/weiznich/crates-mirror"
 
 [dependencies]
 clap = "2.9.2"

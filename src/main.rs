@@ -25,6 +25,7 @@ use std::io::{BufWriter, Write, Read, BufReader, BufRead};
 use std::sync::{RwLock, Arc};
 use std::collections::HashSet;
 use std::time::Duration;
+use std::ops::Deref;
 use rustc_serialize::Decodable;
 use rustc_serialize::json;
 
@@ -115,10 +116,15 @@ struct Crate {
 
 impl Crate {
     fn get_index_file(&self, mut index: PathBuf) -> File {
-        match self.name.len() {
+        let name = self.name.chars().flat_map(|c| c.to_lowercase()).collect::<String>();
+        match name.len() {
             e if e > 3 => {
                 index.push(&self.name[0..2]);
                 index.push(&self.name[2..4]);
+            }
+            3 => {
+                index.push("3");
+                index.push(&self.name[0..1]);
             }
             e => index.push(e.to_string()),
         }
@@ -142,7 +148,7 @@ impl Mirror {
                                       self.remote_api,
                                       krate.name,
                                       krate.version))
-                      .unwrap();
+            .unwrap();
         Ok(Response::with((Status::TemporaryRedirect, Redirect(url))))
     }
 
@@ -178,15 +184,15 @@ impl Mirror {
             krate.version,);
         debug!("try to download {:?} from {}", krate, url);
         handle.url(&url)
-              .unwrap();
+            .unwrap();
         handle.follow_location(true).unwrap();
         {
             let mut transfer = handle.transfer();
             transfer.write_function(|data| {
-                        debug!("get part of {:?}", krate);
-                        Ok(writer.write(data).unwrap())
-                    })
-                    .unwrap();
+                    debug!("get part of {:?}", krate);
+                    Ok(writer.write(data).unwrap())
+                })
+                .unwrap();
             match transfer.perform() {
                 Ok(_) => {}
                 Err(e) => {
@@ -216,17 +222,17 @@ impl Mirror {
 impl Handler for Mirror {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
         let crate_name = req.extensions
-                            .get::<Router>()
-                            .unwrap()
-                            .find("name")
-                            .unwrap_or("/")
-                            .to_string();
+            .get::<Router>()
+            .unwrap()
+            .find("name")
+            .unwrap_or("/")
+            .to_string();
         let crate_version = req.extensions
-                               .get::<Router>()
-                               .unwrap()
-                               .find("version")
-                               .unwrap_or("/")
-                               .to_string();
+            .get::<Router>()
+            .unwrap()
+            .find("version")
+            .unwrap_or("/")
+            .to_string();
         let krate = Crate {
             name: crate_name.clone(),
             version: crate_version.clone(),
@@ -246,11 +252,10 @@ impl Handler for Mirror {
         if base_dir.exists() {
             let f = BufReader::new(krate.get_index_file(self.index_path.clone()));
             let cksum = f.lines()
-                         .map(IndexFile::from_line)
-                         .filter(|i| i.vers == krate.version)
-                         .map(|i| i.cksum)
-                         .next()
-                         .unwrap();
+                .map(IndexFile::from_line)
+                .find(|i| i.vers == krate.version)
+                .map(|i| i.cksum)
+                .unwrap();
 
 
             debug!("load cached file");
@@ -261,9 +266,9 @@ impl Handler for Mirror {
             reader.read_to_end(&mut data).unwrap();
             let mut hasher = Sha256::new();
             hasher.input(&data);
-            if hasher.result_str() != cksum {
+            if (hasher.result().deref()) != cksum.as_bytes() {
                 warn!("Checksum of {:?} did not match ", krate);
-                debug!("{} vs {}", hasher.result_str(), cksum);
+                //                debug!("{} vs {}", hasher.result_str(), cksum);
                 ::std::fs::remove_file(base_dir).unwrap();
                 self.download(&krate);
                 self.redirect(&krate)
@@ -284,17 +289,17 @@ fn main() {
                                  env!("CARGO_PKG_VERSION_MINOR"),
                                  env!("CARGO_PKG_VERSION_PATCH"));
     let matches = App::new("Crates Mirror")
-                      .version(version)
-                      .author(env!("CARGO_PKG_AUTHORS"))
-                      .about(env!("CARGO_PKG_DESCRIPTION"))
-                      .arg(Arg::with_name("config")
-                               .short("c")
-                               .long("config")
-                               .required(true)
-                               .value_name("FILE")
-                               .help("Sets a config file")
-                               .takes_value(true))
-                      .get_matches();
+        .version(version)
+        .author(env!("CARGO_PKG_AUTHORS"))
+        .about(env!("CARGO_PKG_DESCRIPTION"))
+        .arg(Arg::with_name("config")
+            .short("c")
+            .long("config")
+            .required(true)
+            .value_name("FILE")
+            .help("Sets a config file")
+            .takes_value(true))
+        .get_matches();
     let config = Config::from_file(matches.value_of("config").unwrap());
     let mut base_dir = PathBuf::from(config.base_path.clone());
     if !base_dir.exists() {
@@ -304,7 +309,7 @@ fn main() {
     base_dir.push("index");
     let repo = if !base_dir.exists() {
         let repo = Repository::clone(&config.registry_config.upstream_url, base_dir.clone())
-                       .unwrap();
+            .unwrap();
         {
             let mut config_file = base_dir.clone();
             config_file.push("config.json");
@@ -320,12 +325,12 @@ fn main() {
             let tree = repo.find_tree(id).unwrap();
             let parent = repo.find_commit(repo.refname_to_id("HEAD").unwrap()).unwrap();
             let id = repo.commit(Some("HEAD"),
-                                 &sig,
-                                 &sig,
-                                 "Add local mirror",
-                                 &tree,
-                                 &[&parent])
-                         .unwrap();
+                        &sig,
+                        &sig,
+                        "Add local mirror",
+                        &tree,
+                        &[&parent])
+                .unwrap();
             repo.reset(&repo.find_object(id, None).unwrap(), ResetType::Hard, None).unwrap();
             if let Some(remote) = config.registry_config.origin_url.clone() {
                 let mut callbacks = git2::RemoteCallbacks::new();
@@ -357,14 +362,16 @@ fn main() {
         active_downloads: Arc::new(RwLock::new(HashSet::new())),
     };
     let mut router = Router::new();
-    router.get("/api/v1/crates/:name/:version/download", mirror);
+    router.get("/api/v1/crates/:name/:version/download",
+               mirror,
+               "get-crate");
 
     debug!("startup finished");
     println!("finish to setup crates.io mirror. Point cargo repository to {}",
              config.registry_config
-                   .origin_url
-                   .clone()
-                   .unwrap_or(format!("file://{}", base_dir.to_str().unwrap())));
+                 .origin_url
+                 .clone()
+                 .unwrap_or(format!("file://{}", base_dir.to_str().unwrap())));
 
     Iron::new(router)
         .http(url)
@@ -390,7 +397,7 @@ fn poll_index(repo: Repository, config: Config) {
     loop {
         ::std::thread::sleep(Duration::from_secs(config.poll_intervall.unwrap_or(60) as u64));
         origin.fetch(&["refs/heads/*:refs/heads/*"], None, None).unwrap();
-        let head = repo.refname_to_id("HEAD").unwrap();
+        let head = repo.head().ok().and_then(|h| h.target()).unwrap();
         let remote_head = repo.refname_to_id("refs/remotes/origin/master").unwrap();
         let head = repo.find_commit(head).unwrap();
         let remote_head = repo.find_commit(remote_head).unwrap();

@@ -7,14 +7,18 @@ description = "Crates.io mirror"
 repository = "https://github.com/weiznich/crates-mirror"
 
 [dependencies]
-clap = "2.9.2"
+clap = "2"
 curl = "0.3"
-env_logger = "0.3.4"
-git2 = "0.3"
-iron = "0.3"
+env_logger = "0.3"
+git2 = "0.5"
+iron = "0.4"
 log = "0.3.6"
-router = "0.1.1"
+router = "0.4"
 rustc-serialize = "0.3"
-sha2 = "0.1.2"
-toml = "0.1"
-clippy = {version= "0.0.68", optional = true}
+sha2 = "0.2"
+toml = "0.2"
+clippy = {version= "0.0.95", optional = true}
+
+
+[features]
+default = ["clippy"]

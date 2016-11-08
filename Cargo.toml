@@ -8,9 +8,9 @@ repository = "https://github.com/weiznich/crates-mirror"
 
 [dependencies]
 clap = "2"
-curl = "0.3"
+curl = "0.4"
 env_logger = "0.3"
-git2 = "0.5"
+git2 = "0.6"
 iron = "0.4"
 log = "0.3.6"
 router = "0.4"

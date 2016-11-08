@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![deny(warnings)]
+// #![deny(warnings)]
 extern crate rustc_serialize;
 extern crate router;
 extern crate iron;
@@ -30,7 +30,7 @@ use rustc_serialize::Decodable;
 use rustc_serialize::json;
 
 use curl::easy::Easy;
-use git2::{Repository, ResetType, Cred};
+use git2::{Repository, Cred};
 use sha2::{Digest, Sha256};
 use clap::{App, Arg};
 
@@ -311,27 +311,39 @@ fn main() {
         let repo = Repository::clone(&config.registry_config.upstream_url, base_dir.clone())
             .unwrap();
         {
-            let mut config_file = base_dir.clone();
-            config_file.push("config.json");
-            let mut config_file = File::create(config_file).unwrap();
+            let mut config_file_path = base_dir.clone();
+            config_file_path.push("config.json");
+            let mut config_file = File::create(config_file_path.clone()).unwrap();
             write!(&mut config_file,
                    "{{\"dl\": \"http://{url}/api/v1/crates\", \"api\": \"http://{url}\"}}",
                    url = url)
                 .unwrap();
-            let sig = repo.signature().unwrap();
+
+            let repo_path = repo.workdir().unwrap();
+            // git add $file
             let mut index = repo.index().unwrap();
-            index.update_all(&["config.json"], None).unwrap();
-            let id = index.write_tree_to(&repo).unwrap();
-            let tree = repo.find_tree(id).unwrap();
-            let parent = repo.find_commit(repo.refname_to_id("HEAD").unwrap()).unwrap();
-            let id = repo.commit(Some("HEAD"),
+            let mut repo_path = repo_path.iter();
+            let dst = config_file_path.iter()
+                .skip_while(|s| Some(*s) == repo_path.next())
+                .collect::<PathBuf>();
+            index.add_path(&dst).unwrap();
+            index.write().unwrap();
+            let tree_id = index.write_tree().unwrap();
+            let tree = repo.find_tree(tree_id).unwrap();
+
+            // git commit -m "..."
+            let head = repo.head().unwrap();
+            let parent = repo.find_commit(head.target().unwrap()).unwrap();
+            let sig = repo.signature().unwrap();
+            repo.commit(Some("HEAD"),
                         &sig,
                         &sig,
                         "Add local mirror",
                         &tree,
                         &[&parent])
                 .unwrap();
-            repo.reset(&repo.find_object(id, None).unwrap(), ResetType::Hard, None).unwrap();
+
+
             if let Some(remote) = config.registry_config.origin_url.clone() {
                 let mut callbacks = git2::RemoteCallbacks::new();
                 callbacks.credentials(credentials);
@@ -396,23 +408,40 @@ fn poll_index(repo: Repository, config: Config) {
     let mut origin = repo.find_remote("origin").unwrap();
     loop {
         ::std::thread::sleep(Duration::from_secs(config.poll_intervall.unwrap_or(60) as u64));
-        origin.fetch(&["refs/heads/*:refs/heads/*"], None, None).unwrap();
-        let head = repo.head().ok().and_then(|h| h.target()).unwrap();
-        let remote_head = repo.refname_to_id("refs/remotes/origin/master").unwrap();
-        let head = repo.find_commit(head).unwrap();
-        let remote_head = repo.find_commit(remote_head).unwrap();
-        repo.merge_commits(&head, &remote_head, None).unwrap();
+        origin.fetch(&["master"], None, None).unwrap();
+        let head = repo.head().unwrap();
 
-        if let Some(_) = config.registry_config.origin_url.clone() {
-            let mut callbacks = git2::RemoteCallbacks::new();
-            callbacks.credentials(credentials);
-            let mut remote = repo.find_remote("local").unwrap();
-            let mut opts = git2::PushOptions::new();
-            opts.remote_callbacks(callbacks);
-            remote.push(&["refs/heads/master"], Some(&mut opts)).unwrap();
+        let parent = repo.find_commit(head.target().unwrap()).unwrap();
+        let remote = repo.find_reference("refs/remotes/origin/master").unwrap();
+        let c = repo.reference_to_annotated_commit(&remote).unwrap();
+        let mut checkout = ::git2::build::CheckoutBuilder::new();
+        let mut merge_option = ::git2::MergeOptions::new();
+        let mut index = repo.index().unwrap();
+        let old_tree = repo.find_tree(index.write_tree().unwrap()).unwrap();
+        repo.merge(&[&c],
+                   Some(merge_option.file_favor(::git2::FileFavor::Theirs)),
+                   Some(checkout.force()))
+            .unwrap();
+        index.write().unwrap();
+        let tree_id = index.write_tree().unwrap();
+        let tree = repo.find_tree(tree_id).unwrap();
+        let diff = repo.diff_tree_to_tree(Some(&old_tree), Some(&tree), None).unwrap();
+        if diff.stats().unwrap().files_changed() > 0 {
+
+            let sig = repo.signature().unwrap();
+            repo.commit(Some("HEAD"), &sig, &sig, "Merge", &tree, &[&parent])
+                .unwrap();
+
+            if let Some(_) = config.registry_config.origin_url.clone() {
+                let mut callbacks = git2::RemoteCallbacks::new();
+                callbacks.credentials(credentials);
+                let mut remote = repo.find_remote("local").unwrap();
+                let mut opts = git2::PushOptions::new();
+                opts.remote_callbacks(callbacks);
+                remote.push(&["refs/heads/master"], Some(&mut opts)).unwrap();
+            }
+            info!("updated index");
         }
-
-        info!("updated index");
     }
 
 }

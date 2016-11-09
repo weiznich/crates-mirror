@@ -2,10 +2,19 @@ sudo: false
 language: rust
 rust:
   - nightly
+  - nightly-2016-10-18
   - beta
   - stable
+matrix:
+  allow_failures:
+    - rust: nightly
 script:
-  - cargo build --verbose
+  - |
+    if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
+        cargo build --verbose --features="clippy"
+    else
+        cargo build --verbose 
+    fi
 addons:
   apt:
     sources:

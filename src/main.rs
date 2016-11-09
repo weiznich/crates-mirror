@@ -5,7 +5,9 @@
 // <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
-
+#![cfg_attr(feature = "clippy", feature(plugin))]
+#![cfg_attr(feature = "clippy", plugin(clippy))]
+#![cfg_attr(not(feature = "clippy"), allow(unknown_lints))]//ignore clippy lints on stable
 #![deny(warnings)]
 extern crate rustc_serialize;
 extern crate router;
@@ -416,21 +418,18 @@ fn credentials(url: &str,
     let mut error = git2::Error::from_str(&format!("Failed to find credentials for {}", url));
     debug!("credentials");
     if cred.contains(CredentialType::from(git2::USER_PASS_PLAINTEXT)) {
-        match (&origin_config.username, &origin_config.password) {
-            (&Some(ref u), &Some(ref p)) => {
-                debug!("from username/password");
-                match Cred::userpass_plaintext(&u, &p) {
-                    Err(e) => {
-                        debug!("Error: {:?}", e);
-                        error = e;
-                    }
-                    Ok(c) => {
-                        debug!("Ok!");
-                        return Ok(c);
-                    }
+        if let (&Some(ref u), &Some(ref p)) = (&origin_config.username, &origin_config.password) {
+            debug!("from username/password");
+            match Cred::userpass_plaintext(u, p) {
+                Err(e) => {
+                    debug!("Error: {:?}", e);
+                    error = e;
+                }
+                Ok(c) => {
+                    debug!("Ok!");
+                    return Ok(c);
                 }
             }
-            _ => {}
         }
     }
     if cred.contains(CredentialType::from(git2::DEFAULT)) {
@@ -461,7 +460,7 @@ fn credentials(url: &str,
             }
         }
     }
-    return Err(error);
+    Err(error)
 }
 
 fn poll_index(repo: Repository, config: Config) {

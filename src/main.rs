@@ -27,9 +27,9 @@ use std::io::{BufWriter, Write, Read, BufReader, BufRead};
 use std::sync::{RwLock, Arc};
 use std::collections::HashSet;
 use std::time::Duration;
-use std::ops::Deref;
 use rustc_serialize::Decodable;
 use rustc_serialize::json;
+use rustc_serialize::hex::ToHex;
 
 use curl::easy::Easy;
 use git2::{Repository, Cred, CredentialType};
@@ -226,8 +226,6 @@ impl Mirror {
     }
 }
 
-
-
 impl Handler for Mirror {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
         let crate_name = req.extensions
@@ -251,13 +249,14 @@ impl Handler for Mirror {
         base_dir.push(krate.name.clone());
         base_dir.push(krate.version.clone());
         debug!("try to get {:?}", krate);
+        debug!("try to get {:?}", base_dir);
         {
             let active = self.active_downloads.read().unwrap();
             if active.contains(&krate) {
+                debug!("already downloaded");
                 return self.redirect(&krate);
             }
         }
-
         if base_dir.exists() {
             let f = BufReader::new(krate.get_index_file(self.index_path.clone()));
             let cksum = f.lines()
@@ -275,9 +274,9 @@ impl Handler for Mirror {
             reader.read_to_end(&mut data).unwrap();
             let mut hasher = Sha256::new();
             hasher.input(&data);
-            if (hasher.result().deref()) != cksum.as_bytes() {
+            if hasher.result().to_hex() != cksum {
                 warn!("Checksum of {:?} did not match ", krate);
-                //                debug!("{} vs {}", hasher.result_str(), cksum);
+                debug!("{:?} vs {:?}", hasher.result().to_hex(), cksum);
                 ::std::fs::remove_file(base_dir).unwrap();
                 self.download(&krate);
                 self.redirect(&krate)

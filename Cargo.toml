@@ -6,7 +6,7 @@ license = "MIT/Apache-2.0"
 description = "Crates.io mirror"
 repository = "https://github.com/weiznich/crates-mirror"
 readme = "README.md"
-keywords = ["crates.io", "mirror"]
+keywords = ["crates", "mirror"]
 include = [
     "src/main.rs",
     "Cargo.toml",

@@ -30,7 +30,7 @@ use rustc_serialize::Decodable;
 use rustc_serialize::json;
 
 use curl::easy::Easy;
-use git2::{Repository, Cred};
+use git2::{Repository, Cred, CredentialType};
 use sha2::{Digest, Sha256};
 use clap::{App, Arg};
 
@@ -44,7 +44,14 @@ use router::Router;
 #[derive(Debug, RustcDecodable, Clone)]
 struct GitConfig {
     upstream_url: String,
-    origin_url: Option<String>,
+    origin: Option<OriginConfig>,
+}
+
+#[derive(Debug, RustcDecodable, Clone)]
+struct OriginConfig {
+    url: String,
+    username: Option<String>,
+    password: Option<String>,
 }
 
 #[derive(Debug, RustcDecodable, Clone)]
@@ -344,10 +351,11 @@ fn main() {
                 .unwrap();
 
 
-            if let Some(remote) = config.registry_config.origin_url.clone() {
+            if let Some(ref remote) = config.registry_config.origin {
                 let mut callbacks = git2::RemoteCallbacks::new();
-                callbacks.credentials(credentials);
-                repo.remote("local", &remote).unwrap();
+                callbacks.credentials(|url, user, cred| credentials(url, user, cred, remote));
+                callbacks.transfer_progress(progress_monitor);
+                repo.remote("local", &remote.url).unwrap();
                 let mut remote = repo.find_remote("local").unwrap();
                 let mut opts = git2::PushOptions::new();
                 opts.remote_callbacks(callbacks);
@@ -381,13 +389,22 @@ fn main() {
     debug!("startup finished");
     println!("finish to setup crates.io mirror. Point cargo repository to {}",
              config.registry_config
-                 .origin_url
+                 .origin
+                 .map(|o| o.url)
                  .clone()
                  .unwrap_or(format!("file://{}", base_dir.to_str().unwrap())));
 
     Iron::new(router)
         .http(url)
         .unwrap();
+}
+
+fn progress_monitor(progress: git2::Progress) -> bool {
+    debug!("total :{}, local: {}, remote: {}",
+           progress.total_objects(),
+           progress.local_objects(),
+           progress.received_objects());
+    true
 }
 
 
@@ -493,9 +510,10 @@ fn try_merge(repo: &Repository,
         let sig = try!(repo.signature());
         try!(repo.commit(Some("HEAD"), &sig, &sig, "Merge", &tree, &[&parent]));
 
-        if let Some(_) = config.registry_config.origin_url {
+        if let Some(ref remote) = config.registry_config.origin {
             let mut callbacks = git2::RemoteCallbacks::new();
-            callbacks.credentials(credentials);
+            callbacks.credentials(|url, user, cred| credentials(url, user, cred, remote));
+            callbacks.transfer_progress(progress_monitor);
             let mut remote = try!(repo.find_remote("local"));
             let mut opts = git2::PushOptions::new();
             opts.remote_callbacks(callbacks);
@@ -503,7 +521,7 @@ fn try_merge(repo: &Repository,
         }
         debug!("updated index");
     } else {
-        debug!("Nothing to update");
+        trace!("Nothing to update");
         try!(repo.cleanup_state());
     }
     Ok(())

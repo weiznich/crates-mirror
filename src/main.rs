@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-// #![deny(warnings)]
+#![deny(warnings)]
 extern crate rustc_serialize;
 extern crate router;
 extern crate iron;
@@ -391,16 +391,60 @@ fn main() {
 }
 
 
-pub fn credentials(_url: &str,
-                   user_from_url: Option<&str>,
-                   _cred: git2::CredentialType)
-                   -> Result<git2::Cred, git2::Error> {
-    // TODO: allow more options
-    if let Some(user) = user_from_url {
-        let r = Cred::ssh_key_from_agent(user);
-        return r;
+fn credentials(url: &str,
+               user_from_url: Option<&str>,
+               cred: git2::CredentialType,
+               origin_config: &OriginConfig)
+               -> Result<git2::Cred, git2::Error> {
+    let mut error = git2::Error::from_str(&format!("Failed to find credentials for {}", url));
+    debug!("credentials");
+    if cred.contains(CredentialType::from(git2::USER_PASS_PLAINTEXT)) {
+        match (&origin_config.username, &origin_config.password) {
+            (&Some(ref u), &Some(ref p)) => {
+                debug!("from username/password");
+                match Cred::userpass_plaintext(&u, &p) {
+                    Err(e) => {
+                        debug!("Error: {:?}", e);
+                        error = e;
+                    }
+                    Ok(c) => {
+                        debug!("Ok!");
+                        return Ok(c);
+                    }
+                }
+            }
+            _ => {}
+        }
     }
-    Err(git2::Error::from_str("no authentication set"))
+    if cred.contains(CredentialType::from(git2::DEFAULT)) {
+        let config = try!(git2::Config::open_default());
+        match Cred::credential_helper(&config, url, user_from_url) {
+            Err(e) => {
+                debug!("Error: {:?}", e);
+                error = e;
+            }
+            Ok(c) => {
+                debug!("Ok!");
+                return Ok(c);
+            }
+        }
+    }
+    if cred.contains(CredentialType::from(git2::SSH_KEY)) {
+        if let Some(user) = user_from_url {
+            debug!("from ssh agent");
+            match Cred::ssh_key_from_agent(user) {
+                Err(e) => {
+                    debug!("Error: {:?}", e);
+                    error = e;
+                }
+                Ok(c) => {
+                    debug!("Ok");
+                    return Ok(c);
+                }
+            }
+        }
+    }
+    return Err(error);
 }
 
 fn poll_index(repo: Repository, config: Config) {
@@ -408,40 +452,59 @@ fn poll_index(repo: Repository, config: Config) {
     let mut origin = repo.find_remote("origin").unwrap();
     loop {
         ::std::thread::sleep(Duration::from_secs(config.poll_intervall.unwrap_or(60) as u64));
-        origin.fetch(&["master"], None, None).unwrap();
-        let head = repo.head().unwrap();
-
-        let parent = repo.find_commit(head.target().unwrap()).unwrap();
-        let remote = repo.find_reference("refs/remotes/origin/master").unwrap();
-        let c = repo.reference_to_annotated_commit(&remote).unwrap();
-        let mut checkout = ::git2::build::CheckoutBuilder::new();
-        let mut merge_option = ::git2::MergeOptions::new();
-        let mut index = repo.index().unwrap();
-        let old_tree = repo.find_tree(index.write_tree().unwrap()).unwrap();
-        repo.merge(&[&c],
-                   Some(merge_option.file_favor(::git2::FileFavor::Theirs)),
-                   Some(checkout.force()))
-            .unwrap();
-        index.write().unwrap();
-        let tree_id = index.write_tree().unwrap();
-        let tree = repo.find_tree(tree_id).unwrap();
-        let diff = repo.diff_tree_to_tree(Some(&old_tree), Some(&tree), None).unwrap();
-        if diff.stats().unwrap().files_changed() > 0 {
-
-            let sig = repo.signature().unwrap();
-            repo.commit(Some("HEAD"), &sig, &sig, "Merge", &tree, &[&parent])
-                .unwrap();
-
-            if let Some(_) = config.registry_config.origin_url.clone() {
-                let mut callbacks = git2::RemoteCallbacks::new();
-                callbacks.credentials(credentials);
-                let mut remote = repo.find_remote("local").unwrap();
-                let mut opts = git2::PushOptions::new();
-                opts.remote_callbacks(callbacks);
-                remote.push(&["refs/heads/master"], Some(&mut opts)).unwrap();
+        'retry: for i in 0..20 {
+            match try_merge(&repo, &config, &mut origin) {
+                Ok(()) => break 'retry,
+                Err(ref e) if i == 19 => {
+                    panic!("{:?}", e);
+                }
+                _ => {
+                    debug!("Retry {}", i);
+                }
             }
-            info!("updated index");
         }
     }
 
+}
+
+fn try_merge(repo: &Repository,
+             config: &Config,
+             origin: &mut git2::Remote)
+             -> Result<(), git2::Error> {
+    try!(origin.fetch(&["master"], None, None));
+    let head = try!(repo.head());
+
+    let parent = try!(repo.find_commit(head.target().unwrap()));
+    let remote = try!(repo.find_reference("refs/remotes/origin/master"));
+    let c = try!(repo.reference_to_annotated_commit(&remote));
+    let mut checkout = ::git2::build::CheckoutBuilder::new();
+    let mut merge_option = ::git2::MergeOptions::new();
+    let mut index = try!(repo.index());
+    let old_tree = try!(repo.find_tree(try!(index.write_tree())));
+    try!(repo.merge(&[&c],
+                    Some(merge_option.file_favor(::git2::FileFavor::Theirs)),
+                    Some(checkout.force())));
+    try!(index.write());
+    let tree_id = try!(index.write_tree());
+    let tree = try!(repo.find_tree(tree_id));
+    let diff = try!(repo.diff_tree_to_tree(Some(&old_tree), Some(&tree), None));
+    if try!(diff.stats()).files_changed() > 0 {
+
+        let sig = try!(repo.signature());
+        try!(repo.commit(Some("HEAD"), &sig, &sig, "Merge", &tree, &[&parent]));
+
+        if let Some(_) = config.registry_config.origin_url {
+            let mut callbacks = git2::RemoteCallbacks::new();
+            callbacks.credentials(credentials);
+            let mut remote = try!(repo.find_remote("local"));
+            let mut opts = git2::PushOptions::new();
+            opts.remote_callbacks(callbacks);
+            try!(remote.push(&["refs/heads/master"], Some(&mut opts)));
+        }
+        debug!("updated index");
+    } else {
+        debug!("Nothing to update");
+        try!(repo.cleanup_state());
+    }
+    Ok(())
 }

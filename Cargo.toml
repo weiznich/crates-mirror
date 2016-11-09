@@ -1,7 +1,7 @@
 [package]
 authors = ["Georg Semmler <georg_semmler_05@web.de>"]
 name = "crates-mirror"
-version = "0.2.0"
+version = "0.2.1"
 license = "MIT/Apache-2.0"
 description = "Crates.io mirror"
 repository = "https://github.com/weiznich/crates-mirror"

@@ -1,4 +1,4 @@
-# crates-mirror
+# Crates.io caching mirror
 [![Build Status](https://travis-ci.org/weiznich/crates-mirror.svg?branch=master)](https://travis-ci.org/weiznich/crates-mirror)
 
 
@@ -17,18 +17,30 @@ Stores the index localy on the filesystem.
 base_path = "/path/to/store/crates"
 listen_on = "localhost:3000"
 remote_api = "https://crates.io"
-poll_intervall = 60 #seconds
-registry_config = {upstream_url = "https://github.com/rust-lang/crates.io-index"}
+poll_intervall = 300 # seconds
+
+[registry_config]
+upstream_url = "https://github.com/rust-lang/crates.io-index"
 ```
 ### Remote Index
 Stores the index in a remote git repositority.
 ```toml
-base_path = "/path/to/store/crates"
+base_path = "/tmp/crates_mirror"
 listen_on = "localhost:3000"
 remote_api = "https://crates.io"
-poll_intervall = 60 #seconds
-registry_config = {upstream_url = "https://github.com/rust-lang/crates.io-index", origin_url = "git@own.host/whatever"}
+poll_intervall = 300 # seconds
+
+[registry_config]
+upstream_url = "https://github.com/rust-lang/crates.io-index"
+
+[registry_config.origin]
+url = "git@own.host/whatever"
+username = "weiznich" #optional, could also use ssh-key
+password = "xxxxx" #optional, could also use ssh-key
 ```
+
+## Reading Material
+* [Dissecting Crates.io: Bare Minimum Mirror](https://gmjosack.github.io/posts/dissecting-cratesio-minimum-mirror/)
 
 ## License
 

@@ -374,7 +374,7 @@ fn main() {
                  .unwrap_or(format!("file://{}", base_dir.to_str().unwrap())));
 
     Iron::new(router)
-        .http("localhost:3000")
+        .http(url)
         .unwrap();
 }
 

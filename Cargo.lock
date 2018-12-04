@@ -1,748 +1,970 @@
-[root]
-name = "crates-mirror"
-version = "0.2.0"
-dependencies = [
- "clap 2.18.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "clippy 0.0.95 (registry+https://github.com/rust-lang/crates.io-index)",
- "curl 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "env_logger 0.3.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "git2 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "iron 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "log 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "router 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
- "sha2 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "toml 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
 [[package]]
 name = "aho-corasick"
-version = "0.5.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.6.9"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "memchr 0.1.11 (registry+https://github.com/rust-lang/crates.io-index)",
+ "memchr 2.1.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "ansi_term"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.11.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "atty"
+version = "0.2.11"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "termion 1.5.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "base64"
+version = "0.9.3"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "byteorder 1.2.7 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "safemem 0.3.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
 
 [[package]]
 name = "bitflags"
+version = "1.0.4"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "block-buffer"
 version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "block-padding 0.1.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "byte-tools 0.3.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "byteorder 1.2.7 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "generic-array 0.12.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "block-padding"
+version = "0.1.2"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "byte-tools 0.3.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
 
 [[package]]
 name = "byte-tools"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.3.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "byteorder"
+version = "1.2.7"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "cc"
+version = "1.0.25"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "cfg-if"
+version = "0.1.6"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "clap"
-version = "2.18.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "2.32.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "ansi_term 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
- "strsim 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "term_size 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "unicode-segmentation 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "unicode-width 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "vec_map 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ansi_term 0.11.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "atty 0.2.11 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "bitflags 1.0.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "strsim 0.7.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "textwrap 0.10.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "unicode-width 0.1.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "vec_map 0.8.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "clippy"
-version = "0.0.95"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.0.302"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "clippy_lints 0.0.95 (registry+https://github.com/rust-lang/crates.io-index)",
+ "term 0.5.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
-name = "clippy_lints"
-version = "0.0.95"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "cloudabi"
+version = "0.0.3"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "matches 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "quine-mc_cluskey 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "regex-syntax 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
- "semver 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "toml 0.1.30 (registry+https://github.com/rust-lang/crates.io-index)",
- "unicode-normalization 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bitflags 1.0.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
-name = "cmake"
-version = "0.1.18"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "crates-mirror"
+version = "0.2.1"
 dependencies = [
- "gcc 0.3.38 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "conduit-mime-types"
-version = "0.7.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "cookie"
-version = "0.2.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "time 0.1.35 (registry+https://github.com/rust-lang/crates.io-index)",
- "url 1.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clap 2.32.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "clippy 0.0.302 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "curl 0.4.19 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "env_logger 0.6.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "git2 0.7.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "iron 0.6.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "log 0.4.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "router 0.6.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "serde 1.0.80 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "serde_derive 1.0.80 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "serde_json 1.0.33 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "sha2 0.8.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "toml 0.4.9 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "curl"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.4.19"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "curl-sys 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
- "openssl-probe 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "openssl-sys 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "curl-sys 0.4.15 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "kernel32-sys 0.2.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "openssl-probe 0.1.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "openssl-sys 0.9.39 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "schannel 0.1.14 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "socket2 0.3.8 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi 0.2.8 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "curl-sys"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.4.15"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "gcc 0.3.38 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
- "libz-sys 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "openssl-sys 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "pkg-config 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cc 1.0.25 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libz-sys 1.0.25 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "openssl-sys 0.9.39 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "pkg-config 0.3.14 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "vcpkg 0.2.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "digest"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.8.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "generic-array 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "digest-buffer"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "byte-tools 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "generic-array 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "generic-array 0.12.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "env_logger"
-version = "0.3.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.6.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "log 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "regex 0.1.80 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "error"
-version = "0.1.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "traitobject 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "typeable 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "atty 0.2.11 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "humantime 1.2.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "log 0.4.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "regex 1.1.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "termcolor 1.0.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "fake-simd"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.1.2"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
-name = "gcc"
-version = "0.3.38"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-
-[[package]]
-name = "gdi32-sys"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "fuchsia-zircon"
+version = "0.3.3"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "winapi-build 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bitflags 1.0.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "fuchsia-zircon-sys 0.3.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
+name = "fuchsia-zircon-sys"
+version = "0.3.3"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
 name = "generic-array"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.12.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "nodrop 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "typenum 1.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "typenum 1.10.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "git2"
-version = "0.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.7.5"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
- "libgit2-sys 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "openssl-probe 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "openssl-sys 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "url 1.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "hpack"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "log 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bitflags 1.0.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libgit2-sys 0.7.10 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "log 0.4.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "openssl-probe 0.1.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "openssl-sys 0.9.39 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "url 1.7.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "httparse"
+version = "1.3.3"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "humantime"
 version = "1.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "quick-error 1.2.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
 
 [[package]]
 name = "hyper"
-version = "0.9.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.10.15"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "cookie 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "httparse 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "language-tags 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "log 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "mime 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "num_cpus 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
- "solicit 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "time 0.1.35 (registry+https://github.com/rust-lang/crates.io-index)",
- "traitobject 0.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "typeable 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "unicase 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "url 1.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "base64 0.9.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "httparse 1.3.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "language-tags 0.2.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "log 0.3.9 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "mime 0.2.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "num_cpus 1.8.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "time 0.1.40 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "traitobject 0.1.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "typeable 0.1.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "unicase 1.4.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "url 1.7.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "idna"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.1.5"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "matches 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "unicode-bidi 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "unicode-normalization 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "matches 0.1.8 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "unicode-bidi 0.3.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "unicode-normalization 0.1.7 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "iron"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.6.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "conduit-mime-types 0.7.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "error 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)",
- "hyper 0.9.11 (registry+https://github.com/rust-lang/crates.io-index)",
- "lazy_static 0.1.16 (registry+https://github.com/rust-lang/crates.io-index)",
- "log 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "modifier 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "num_cpus 0.2.13 (registry+https://github.com/rust-lang/crates.io-index)",
- "plugin 0.2.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "typemap 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "url 1.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hyper 0.10.15 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "log 0.3.9 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "mime_guess 1.8.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "modifier 0.1.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "num_cpus 1.8.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "plugin 0.2.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "typemap 0.3.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "url 1.7.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
+
+[[package]]
+name = "itoa"
+version = "0.4.3"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "kernel32-sys"
 version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "winapi-build 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "winapi 0.2.8 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi-build 0.1.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "language-tags"
 version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "lazy_static"
-version = "0.1.16"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "1.2.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "libc"
-version = "0.2.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.2.44"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "libgit2-sys"
-version = "0.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.7.10"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "cmake 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
- "curl-sys 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "gcc 0.3.38 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
- "libssh2-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "libz-sys 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "openssl-sys 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "pkg-config 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cc 1.0.25 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "curl-sys 0.4.15 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libssh2-sys 0.2.11 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libz-sys 1.0.25 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "openssl-sys 0.9.39 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "pkg-config 0.3.14 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "libssh2-sys"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.2.11"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "cmake 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
- "libz-sys 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "openssl-sys 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "pkg-config 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cc 1.0.25 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libz-sys 1.0.25 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "openssl-sys 0.9.39 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "pkg-config 0.3.14 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "vcpkg 0.2.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "libz-sys"
-version = "1.0.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "1.0.25"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "gcc 0.3.38 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
- "pkg-config 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cc 1.0.25 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "pkg-config 0.3.14 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "vcpkg 0.2.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "log"
-version = "0.3.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.3.9"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "log 0.4.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "log"
+version = "0.4.6"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "cfg-if 0.1.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
 
 [[package]]
 name = "matches"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.1.8"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "memchr"
-version = "0.1.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "2.1.1"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cfg-if 0.1.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "version_check 0.1.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "mime"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.2.6"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "log 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "log 0.3.9 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "mime_guess"
+version = "1.8.6"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "mime 0.2.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "phf 0.7.23 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "phf_codegen 0.7.23 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "unicase 1.4.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "modifier"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-
-[[package]]
-name = "nodrop"
-version = "0.1.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "odds 0.2.24 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "nom"
-version = "1.2.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "num_cpus"
-version = "0.2.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "1.8.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
-name = "num_cpus"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "odds"
-version = "0.2.24"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "opaque-debug"
+version = "0.2.1"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "openssl-probe"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.1.2"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "openssl-sys"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.9.39"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "gdi32-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
- "pkg-config 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "user32-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cc 1.0.25 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "pkg-config 0.3.14 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "vcpkg 0.2.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "percent-encoding"
+version = "1.0.1"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "phf"
+version = "0.7.23"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "phf_shared 0.7.23 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "phf_codegen"
+version = "0.7.23"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "phf_generator 0.7.23 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "phf_shared 0.7.23 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "phf_generator"
+version = "0.7.23"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "phf_shared 0.7.23 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "rand 0.5.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "phf_shared"
+version = "0.7.23"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "siphasher 0.2.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "unicase 1.4.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "pkg-config"
-version = "0.3.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.3.14"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "plugin"
 version = "0.2.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "typemap 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "typemap 0.3.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
-name = "quine-mc_cluskey"
-version = "0.2.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "proc-macro2"
+version = "0.4.24"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "unicode-xid 0.1.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "quick-error"
+version = "1.2.2"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "quote"
+version = "0.6.10"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "proc-macro2 0.4.24 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "rand"
+version = "0.5.5"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "cloudabi 0.0.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "fuchsia-zircon 0.3.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "rand_core 0.2.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "rand_core"
+version = "0.2.2"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "rand_core 0.3.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "rand_core"
+version = "0.3.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "redox_syscall"
+version = "0.1.43"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "redox_termios"
+version = "0.1.1"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "redox_syscall 0.1.43 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
 
 [[package]]
 name = "regex"
-version = "0.1.80"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "1.1.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "aho-corasick 0.5.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "memchr 0.1.11 (registry+https://github.com/rust-lang/crates.io-index)",
- "regex-syntax 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
- "thread_local 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "utf8-ranges 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "aho-corasick 0.6.9 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "memchr 2.1.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "regex-syntax 0.6.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "thread_local 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "utf8-ranges 1.0.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "regex-syntax"
-version = "0.3.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.6.4"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "ucd-util 0.1.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
 
 [[package]]
 name = "route-recognizer"
-version = "0.1.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.1.12"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "router"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.6.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "iron 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "route-recognizer 0.1.11 (registry+https://github.com/rust-lang/crates.io-index)",
- "url 1.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "iron 0.6.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "route-recognizer 0.1.12 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "url 1.7.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
-name = "rustc-serialize"
-version = "0.3.19"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "ryu"
+version = "0.2.7"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
-name = "rustc_version"
-version = "0.1.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "safemem"
+version = "0.3.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "schannel"
+version = "0.1.14"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "semver 0.1.20 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lazy_static 1.2.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
-name = "semver"
-version = "0.1.20"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "serde"
+version = "1.0.80"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
-name = "semver"
-version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "serde_derive"
+version = "1.0.80"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "nom 1.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "proc-macro2 0.4.24 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "quote 0.6.10 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "syn 0.15.22 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "serde_json"
+version = "1.0.33"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "itoa 0.4.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "ryu 0.2.7 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "serde 1.0.80 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "sha2"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.8.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "byte-tools 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "digest 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "digest-buffer 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "fake-simd 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "generic-array 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "block-buffer 0.7.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "digest 0.8.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "fake-simd 0.1.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "opaque-debug 0.2.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
-name = "solicit"
-version = "0.4.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "siphasher"
+version = "0.2.3"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "socket2"
+version = "0.3.8"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "hpack 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "log 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cfg-if 0.1.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "redox_syscall 0.1.43 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "strsim"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.7.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
-name = "term_size"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "syn"
+version = "0.15.22"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
- "winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "proc-macro2 0.4.24 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "quote 0.6.10 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "unicode-xid 0.1.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
-name = "thread-id"
-version = "2.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+name = "term"
+version = "0.5.1"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "byteorder 1.2.7 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "termcolor"
+version = "1.0.4"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "wincolor 1.0.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "termion"
+version = "1.5.1"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "redox_syscall 0.1.43 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "redox_termios 0.1.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "textwrap"
+version = "0.10.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "unicode-width 0.1.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "thread_local"
-version = "0.2.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.3.6"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "thread-id 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lazy_static 1.2.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "time"
-version = "0.1.35"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.1.40"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)",
- "winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "redox_syscall 0.1.43 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "toml"
-version = "0.1.30"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.4.9"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "toml"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.80 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "traitobject"
-version = "0.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-
-[[package]]
-name = "traitobject"
-version = "0.0.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.1.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "typeable"
 version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "typemap"
 version = "0.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "unsafe-any 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "unsafe-any 0.4.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "typenum"
-version = "1.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "1.10.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "ucd-util"
+version = "0.1.3"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "unicase"
-version = "1.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "1.4.2"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "rustc_version 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "version_check 0.1.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "unicode-bidi"
-version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.3.4"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "matches 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "matches 0.1.8 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "unicode-normalization"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-
-[[package]]
-name = "unicode-segmentation"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.1.7"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "unicode-width"
-version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.1.5"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "unicode-xid"
+version = "0.1.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "unsafe-any"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.4.2"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "traitobject 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "traitobject 0.1.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "url"
-version = "1.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "1.7.2"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 dependencies = [
- "idna 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "matches 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "user32-sys"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "winapi-build 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "idna 0.1.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "matches 0.1.8 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "percent-encoding 1.0.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
 ]
 
 [[package]]
 name = "utf8-ranges"
-version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "1.0.2"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "vcpkg"
+version = "0.2.6"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "vec_map"
-version = "0.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.8.1"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "version_check"
+version = "0.1.5"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
 
 [[package]]
 name = "winapi"
 version = "0.2.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "winapi"
+version = "0.3.6"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "winapi-i686-pc-windows-gnu 0.4.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi-x86_64-pc-windows-gnu 0.4.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
 
 [[package]]
 name = "winapi-build"
 version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "winapi-i686-pc-windows-gnu"
+version = "0.4.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "winapi-util"
+version = "0.1.1"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
+
+[[package]]
+name = "winapi-x86_64-pc-windows-gnu"
+version = "0.4.0"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+
+[[package]]
+name = "wincolor"
+version = "1.0.1"
+source = "registry+git://mirrors.ustc.edu.cn/crates.io-index"
+dependencies = [
+ "winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+ "winapi-util 0.1.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)",
+]
 
 [metadata]
-"checksum aho-corasick 0.5.3 (registry+https://github.com/rust-lang/crates.io-index)" = "ca972c2ea5f742bfce5687b9aef75506a764f61d37f8f649047846a9686ddb66"
-"checksum ansi_term 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)" = "23ac7c30002a5accbf7e8987d0632fa6de155b7c3d39d0067317a391e00a2ef6"
-"checksum bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "aad18937a628ec6abcd26d1489012cc0e18c21798210f491af69ded9b881106d"
-"checksum byte-tools 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "742304e40c19c876b1546af6e5fa55e1e24293cf16f0fec3419da34a839518b2"
-"checksum clap 2.18.0 (registry+https://github.com/rust-lang/crates.io-index)" = "40046b8a004bf3ba43b9078bf4b9b6d1708406a234848f925dbd7160a374c8a8"
-"checksum clippy 0.0.95 (registry+https://github.com/rust-lang/crates.io-index)" = "326a296da2adbb719fcc2301f3b44a148261f72a46dbda89930ead9c90d584b2"
-"checksum clippy_lints 0.0.95 (registry+https://github.com/rust-lang/crates.io-index)" = "921bb7c49a9a58f6bd097fbbb9f729426e0f05372fe5b81a0a053f6b2d98dc5b"
-"checksum cmake 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)" = "0e5bcf27e097a184c1df4437654ed98df3d7a516e8508a6ba45d8b092bbdf283"
-"checksum conduit-mime-types 0.7.3 (registry+https://github.com/rust-lang/crates.io-index)" = "95ca30253581af809925ef68c2641cc140d6183f43e12e0af4992d53768bd7b8"
-"checksum cookie 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)" = "0e3d6405328b6edb412158b3b7710e2634e23f3614b9bb1c412df7952489a626"
-"checksum curl 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ae1fb7dae6127858e897fa6ba0d4e17bb63ad68fccd8a94ff72408f15f6c7614"
-"checksum curl-sys 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "617d7a5c30057f4af4b99ca4f9bc80acc543f18d2dd224f724c407a428dd8f5f"
-"checksum digest 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "351f7beb6a00bbeaae9917ce01e390ba6005e7431cc244cb47a36e748ba6a7db"
-"checksum digest-buffer 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "8e4e8e55a2338a0e4ee3fa44e20c56b26fafe3544a608b4d233bba36ae938ff8"
-"checksum env_logger 0.3.5 (registry+https://github.com/rust-lang/crates.io-index)" = "15abd780e45b3ea4f76b4e9a26ff4843258dd8a3eed2775a0e7368c2e7936c2f"
-"checksum error 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)" = "a6e606f14042bb87cc02ef6a14db6c90ab92ed6f62d87e69377bc759fd7987cc"
-"checksum fake-simd 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "3e0ab991abb1eec35079831199b79b4139553d299a9182aa3bfc4019615a0cb1"
-"checksum gcc 0.3.38 (registry+https://github.com/rust-lang/crates.io-index)" = "553f11439bdefe755bf366b264820f1da70f3aaf3924e594b886beb9c831bcf5"
-"checksum gdi32-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "0912515a8ff24ba900422ecda800b52f4016a56251922d397c576bf92c690518"
-"checksum generic-array 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "5a3fb8dffe3fbf0fc95cd4f0b441cbf3ca81adfc988566bc28ee80291335ac5e"
-"checksum git2 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ae93eae026f17b013912629d243444e52ee5d6b1339e71d5212099d1d1b73fc2"
-"checksum hpack 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "3d2da7d3a34cf6406d9d700111b8eafafe9a251de41ae71d8052748259343b58"
-"checksum httparse 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "6a8abece705b1d32c478f49447b3a575cd07f6e362ff12518f2ee2c9b9ced64e"
-"checksum hyper 0.9.11 (registry+https://github.com/rust-lang/crates.io-index)" = "edd47c66782933e546a32ae89ca3c49263b2ba9bc29f3a0d5c52fff48e0ac67c"
-"checksum idna 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "1053236e00ce4f668aeca4a769a09b3bf5a682d802abd6f3cb39374f6b162c11"
-"checksum iron 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "9fb1b2d809f84bf347e472d5758762b5c804e0c622970235f156d82673e4d334"
-"checksum kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "7507624b29483431c0ba2d82aece8ca6cdba9382bff4ddd0f7490560c056098d"
-"checksum language-tags 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "a91d884b6667cd606bb5a69aa0c99ba811a115fc68915e7056ec08a46e93199a"
-"checksum lazy_static 0.1.16 (registry+https://github.com/rust-lang/crates.io-index)" = "cf186d1a8aa5f5bee5fd662bc9c1b949e0259e1bcc379d1f006847b0080c7417"
-"checksum libc 0.2.17 (registry+https://github.com/rust-lang/crates.io-index)" = "044d1360593a78f5c8e5e710beccdc24ab71d1f01bc19a29bcacdba22e8475d8"
-"checksum libgit2-sys 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)" = "f73b0f0fe922fe6cacd208645b42ddbbd24dbbb8d1ad1de0e0e28761c678e3e4"
-"checksum libssh2-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "6f564ef4a6548bec6f3ea066922eaaa2618f163521bc22ecd72c2cd1c3c08ee1"
-"checksum libz-sys 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)" = "40f2df7730b5d29426c3e44ce4d088d8c5def6471c2c93ba98585b89fb201ce6"
-"checksum log 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)" = "ab83497bf8bf4ed2a74259c1c802351fcd67a65baa86394b6ba73c36f4838054"
-"checksum matches 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)" = "efd7622e3022e1a6eaa602c4cea8912254e5582c9c692e9167714182244801b1"
-"checksum memchr 0.1.11 (registry+https://github.com/rust-lang/crates.io-index)" = "d8b629fb514376c675b98c1421e80b151d3817ac42d7c667717d282761418d20"
-"checksum mime 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "b5c93a4bd787ddc6e7833c519b73a50883deb5863d76d9b71eb8216fb7f94e66"
-"checksum modifier 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "41f5c9112cb662acd3b204077e0de5bc66305fa8df65c8019d5adb10e9ab6e58"
-"checksum nodrop 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)" = "0dbbadd3f4c98dea0bd3d9b4be4c0cdaf1ab57035cb2e41fce3983db5add7cc5"
-"checksum nom 1.2.4 (registry+https://github.com/rust-lang/crates.io-index)" = "a5b8c256fd9471521bcb84c3cdba98921497f1a331cbc15b8030fc63b82050ce"
-"checksum num_cpus 0.2.13 (registry+https://github.com/rust-lang/crates.io-index)" = "cee7e88156f3f9e19bdd598f8d6c9db7bf4078f99f8381f43a55b09648d1a6e3"
-"checksum num_cpus 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "8890e6084723d57d0df8d2720b0d60c6ee67d6c93e7169630e4371e88765dcad"
-"checksum odds 0.2.24 (registry+https://github.com/rust-lang/crates.io-index)" = "97b2d7c12734955740d14f7a6723d8dd8ed53cf16770ab38ca6a1aaf3124fc0d"
-"checksum openssl-probe 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "756d49c8424483a3df3b5d735112b4da22109ced9a8294f1f5cdf80fb3810919"
-"checksum openssl-sys 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)" = "48b25c7337949b0e04625444efbff87bef5251e1a4d19aeac6d317d49c8a8df3"
-"checksum pkg-config 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)" = "8cee804ecc7eaf201a4a207241472cc870e825206f6c031e3ee2a72fa425f2fa"
-"checksum plugin 0.2.6 (registry+https://github.com/rust-lang/crates.io-index)" = "1a6a0dc3910bc8db877ffed8e457763b317cf880df4ae19109b9f77d277cf6e0"
-"checksum quine-mc_cluskey 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)" = "07589615d719a60c8dd8a4622e7946465dfef20d1a428f969e3443e7386d5f45"
-"checksum regex 0.1.80 (registry+https://github.com/rust-lang/crates.io-index)" = "4fd4ace6a8cf7860714a2c2280d6c1f7e6a413486c13298bbc86fd3da019402f"
-"checksum regex-syntax 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)" = "f9ec002c35e86791825ed294b50008eea9ddfc8def4420124fbc6b08db834957"
-"checksum route-recognizer 0.1.11 (registry+https://github.com/rust-lang/crates.io-index)" = "4f0a750d020adb1978f5964ea7bca830585899b09da7cbb3f04961fc2400122d"
-"checksum router 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "b94397bfa5b772b4375be4da12560a7c1c1e74b2e35c46ed312958aad56df726"
-"checksum rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)" = "6159e4e6e559c81bd706afe9c8fd68f547d3e851ce12e76b1de7914bab61691b"
-"checksum rustc_version 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)" = "c5f5376ea5e30ce23c03eb77cbe4962b988deead10910c372b226388b594c084"
-"checksum semver 0.1.20 (registry+https://github.com/rust-lang/crates.io-index)" = "d4f410fedcf71af0345d7607d246e7ad15faaadd49d240ee3b24e5dc21a820ac"
-"checksum semver 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "2d5b7638a1f03815d94e88cb3b3c08e87f0db4d683ef499d1836aaf70a45623f"
-"checksum sha2 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "1f31bcd58861be78a3779ba40cb84c1e9da0a650ae2ea5041a8d9cdb735b3389"
-"checksum solicit 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)" = "172382bac9424588d7840732b250faeeef88942e37b6e35317dce98cafdd75b2"
-"checksum strsim 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "50c069df92e4b01425a8bf3576d5d417943a6a7272fbabaf5bd80b1aaa76442e"
-"checksum term_size 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "3f7f5f3f71b0040cecc71af239414c23fd3c73570f5ff54cf50e03cef637f2a0"
-"checksum thread-id 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "a9539db560102d1cef46b8b78ce737ff0bb64e7e18d35b2a5688f7d097d0ff03"
-"checksum thread_local 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)" = "8576dbbfcaef9641452d5cf0df9b0e7eeab7694956dd33bb61515fb8f18cfdd5"
-"checksum time 0.1.35 (registry+https://github.com/rust-lang/crates.io-index)" = "3c7ec6d62a20df54e07ab3b78b9a3932972f4b7981de295563686849eb3989af"
-"checksum toml 0.1.30 (registry+https://github.com/rust-lang/crates.io-index)" = "0590d72182e50e879c4da3b11c6488dae18fccb1ae0c7a3eda18e16795844796"
-"checksum toml 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "736b60249cb25337bc196faa43ee12c705e426f3d55c214d73a4e7be06f92cb4"
-"checksum traitobject 0.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "07eaeb7689bb7fca7ce15628319635758eda769fed481ecfe6686ddef2600616"
-"checksum traitobject 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "9dc23794ff47c95882da6f9d15de9a6be14987760a28cc0aafb40b7675ef09d8"
-"checksum typeable 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "1410f6f91f21d1612654e7cc69193b0334f909dcf2c790c4826254fbb86f8887"
-"checksum typemap 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)" = "653be63c80a3296da5551e1bfd2cca35227e13cdd08c6668903ae2f4f77aa1f6"
-"checksum typenum 1.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "4c8f87f6fc2d9e77d3721d04d87a637ed3dfbd1ffe21490edb69075de985c36d"
-"checksum unicase 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "13a5906ca2b98c799f4b1ab4557b76367ebd6ae5ef14930ec841c74aed5f3764"
-"checksum unicode-bidi 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "c1f7ceb96afdfeedee42bade65a0d585a6a0106f681b6749c8ff4daa8df30b3f"
-"checksum unicode-normalization 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "26643a2f83bac55f1976fb716c10234485f9202dcd65cfbdf9da49867b271172"
-"checksum unicode-segmentation 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "b905d0fc2a1f0befd86b0e72e31d1787944efef9d38b9358a9e92a69757f7e3b"
-"checksum unicode-width 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)" = "2d6722facc10989f63ee0e20a83cd4e1714a9ae11529403ac7e0afd069abc39e"
-"checksum unsafe-any 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)" = "b351086021ebc264aea3ab4f94d61d889d98e5e9ec2d985d993f50133537fd3a"
-"checksum url 1.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "48ccf7bd87a81b769cf84ad556e034541fb90e1cd6d4bc375c822ed9500cd9d7"
-"checksum user32-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "4ef4711d107b21b410a3a974b1204d9accc8b10dad75d8324b5d755de1617d47"
-"checksum utf8-ranges 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)" = "a1ca13c08c41c9c3e04224ed9ff80461d97e121589ff27c753a16cb10830ae0f"
-"checksum vec_map 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)" = "cac5efe5cb0fa14ec2f84f83c701c562ee63f6dcc680861b21d65c682adfb05f"
-"checksum winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)" = "167dc9d6949a9b857f3451275e911c3f44255842c1f7a76f33c55103a909087a"
-"checksum winapi-build 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "2d315eee3b34aca4797b2da6b13ed88266e6d612562a0c46390af8299fc699bc"
+"checksum aho-corasick 0.6.9 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "1e9a933f4e58658d7b12defcf96dc5c720f20832deebe3e0a19efd3b6aaeeb9e"
+"checksum ansi_term 0.11.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "ee49baf6cb617b853aa8d93bf420db2383fab46d314482ca2803b40d5fde979b"
+"checksum atty 0.2.11 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "9a7d5b8723950951411ee34d271d99dddcc2035a16ab25310ea2c8cfd4369652"
+"checksum base64 0.9.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "489d6c0ed21b11d038c31b6ceccca973e65d73ba3bd8ecb9a2babf5546164643"
+"checksum bitflags 1.0.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "228047a76f468627ca71776ecdebd732a3423081fcf5125585bcd7c49886ce12"
+"checksum block-buffer 0.7.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "49665c62e0e700857531fa5d3763e91b539ff1abeebd56808d378b495870d60d"
+"checksum block-padding 0.1.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "4fc4358306e344bf9775d0197fd00d2603e5afb0771bb353538630f022068ea3"
+"checksum byte-tools 0.3.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "980479e6fde23246dfb54d47580d66b4e99202e7579c5eaa9fe10ecb5ebd2182"
+"checksum byteorder 1.2.7 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "94f88df23a25417badc922ab0f5716cc1330e87f71ddd9203b3a3ccd9cedf75d"
+"checksum cc 1.0.25 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "f159dfd43363c4d08055a07703eb7a3406b0dac4d0584d96965a3262db3c9d16"
+"checksum cfg-if 0.1.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "082bb9b28e00d3c9d39cc03e64ce4cea0f1bb9b3fde493f0cbc008472d22bdf4"
+"checksum clap 2.32.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "b957d88f4b6a63b9d70d5f454ac8011819c6efa7727858f458ab71c756ce2d3e"
+"checksum clippy 0.0.302 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "d911ee15579a3f50880d8c1d59ef6e79f9533127a3bd342462f5d584f5e8c294"
+"checksum cloudabi 0.0.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "ddfc5b9aa5d4507acaf872de71051dfd0e309860e88966e1051e462a077aac4f"
+"checksum curl 0.4.19 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "c7c9d851c825e0c033979d4516c9173bc19a78a96eb4d6ae51d4045440eafa16"
+"checksum curl-sys 0.4.15 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "721c204978be2143fab0a84b708c49d79d1f6100b8785610f456043a90708870"
+"checksum digest 0.8.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "05f47366984d3ad862010e22c7ce81a7dbcaebbdfb37241a620f8b6596ee135c"
+"checksum env_logger 0.6.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "afb070faf94c85d17d50ca44f6ad076bce18ae92f0037d350947240a36e9d42e"
+"checksum fake-simd 0.1.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "e88a8acf291dafb59c2d96e8f59828f3838bb1a70398823ade51a84de6a6deed"
+"checksum fuchsia-zircon 0.3.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "2e9763c69ebaae630ba35f74888db465e49e259ba1bc0eda7d06f4a067615d82"
+"checksum fuchsia-zircon-sys 0.3.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "3dcaa9ae7725d12cdb85b3ad99a434db70b468c09ded17e012d86b5c1010f7a7"
+"checksum generic-array 0.12.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "3c0f28c2f5bfb5960175af447a2da7c18900693738343dc896ffbcabd9839592"
+"checksum git2 0.7.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "591f8be1674b421644b6c030969520bc3fa12114d2eb467471982ed3e9584e71"
+"checksum httparse 1.3.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "e8734b0cfd3bc3e101ec59100e101c2eecd19282202e87808b3037b442777a83"
+"checksum humantime 1.2.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "3ca7e5f2e110db35f93b837c81797f3714500b81d517bf20c431b16d3ca4f114"
+"checksum hyper 0.10.15 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "df0caae6b71d266b91b4a83111a61d2b94ed2e2bea024c532b933dcff867e58c"
+"checksum idna 0.1.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "38f09e0f0b1fb55fdee1f17470ad800da77af5186a1a76c026b679358b7e844e"
+"checksum iron 0.6.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "1d8e17268922834707e1c29e8badbf9c712c9c43378e1b6a3388946baff10be2"
+"checksum itoa 0.4.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "1306f3464951f30e30d12373d31c79fbd52d236e5e896fd92f96ec7babbbe60b"
+"checksum kernel32-sys 0.2.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "7507624b29483431c0ba2d82aece8ca6cdba9382bff4ddd0f7490560c056098d"
+"checksum language-tags 0.2.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "a91d884b6667cd606bb5a69aa0c99ba811a115fc68915e7056ec08a46e93199a"
+"checksum lazy_static 1.2.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "a374c89b9db55895453a74c1e38861d9deec0b01b405a82516e9d5de4820dea1"
+"checksum libc 0.2.44 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "10923947f84a519a45c8fefb7dd1b3e8c08747993381adee176d7a82b4195311"
+"checksum libgit2-sys 0.7.10 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "4916b5addc78ec36cc309acfcdf0b9f9d97ab7b84083118b248709c5b7029356"
+"checksum libssh2-sys 0.2.11 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "126a1f4078368b163bfdee65fbab072af08a1b374a5551b21e87ade27b1fbf9d"
+"checksum libz-sys 1.0.25 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "2eb5e43362e38e2bca2fd5f5134c4d4564a23a5c28e9b95411652021a8675ebe"
+"checksum log 0.3.9 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "e19e8d5c34a3e0e2223db8e060f9e8264aeeb5c5fc64a4ee9965c062211c024b"
+"checksum log 0.4.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "c84ec4b527950aa83a329754b01dbe3f58361d1c5efacd1f6d68c494d08a17c6"
+"checksum matches 0.1.8 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "7ffc5c5338469d4d3ea17d269fa8ea3512ad247247c30bd2df69e68309ed0a08"
+"checksum memchr 2.1.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "0a3eb002f0535929f1199681417029ebea04aadc0c7a4224b46be99c7f5d6a16"
+"checksum mime 0.2.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "ba626b8a6de5da682e1caa06bdb42a335aee5a84db8e5046a3e8ab17ba0a3ae0"
+"checksum mime_guess 1.8.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "2d4c0961143b8efdcfa29c3ae63281601b446a4a668165454b6c90f8024954c5"
+"checksum modifier 0.1.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "41f5c9112cb662acd3b204077e0de5bc66305fa8df65c8019d5adb10e9ab6e58"
+"checksum num_cpus 1.8.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "c51a3322e4bca9d212ad9a158a02abc6934d005490c054a2778df73a70aa0a30"
+"checksum opaque-debug 0.2.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "51ecbcb821e1bd256d456fe858aaa7f380b63863eab2eb86eee1bd9f33dd6682"
+"checksum openssl-probe 0.1.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "77af24da69f9d9341038eba93a073b1fdaaa1b788221b00a69bce9e762cb32de"
+"checksum openssl-sys 0.9.39 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "278c1ad40a89aa1e741a1eed089a2f60b18fab8089c3139b542140fc7d674106"
+"checksum percent-encoding 1.0.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "31010dd2e1ac33d5b46a5b413495239882813e0369f8ed8a5e266f173602f831"
+"checksum phf 0.7.23 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "cec29da322b242f4c3098852c77a0ca261c9c01b806cae85a5572a1eb94db9a6"
+"checksum phf_codegen 0.7.23 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "7d187f00cd98d5afbcd8898f6cf181743a449162aeb329dcd2f3849009e605ad"
+"checksum phf_generator 0.7.23 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "03dc191feb9b08b0dc1330d6549b795b9d81aec19efe6b4a45aec8d4caee0c4b"
+"checksum phf_shared 0.7.23 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "b539898d22d4273ded07f64a05737649dc69095d92cb87c7097ec68e3f150b93"
+"checksum pkg-config 0.3.14 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "676e8eb2b1b4c9043511a9b7bea0915320d7e502b0a079fb03f9635a5252b18c"
+"checksum plugin 0.2.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "1a6a0dc3910bc8db877ffed8e457763b317cf880df4ae19109b9f77d277cf6e0"
+"checksum proc-macro2 0.4.24 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "77619697826f31a02ae974457af0b29b723e5619e113e9397b8b82c6bd253f09"
+"checksum quick-error 1.2.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "9274b940887ce9addde99c4eee6b5c44cc494b182b97e73dc8ffdcb3397fd3f0"
+"checksum quote 0.6.10 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "53fa22a1994bd0f9372d7a816207d8a2677ad0325b073f5c5332760f0fb62b5c"
+"checksum rand 0.5.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "e464cd887e869cddcae8792a4ee31d23c7edd516700695608f5b98c67ee0131c"
+"checksum rand_core 0.2.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "1961a422c4d189dfb50ffa9320bf1f2a9bd54ecb92792fb9477f99a1045f3372"
+"checksum rand_core 0.3.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "0905b6b7079ec73b314d4c748701f6931eb79fd97c668caa3f1899b22b32c6db"
+"checksum redox_syscall 0.1.43 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "679da7508e9a6390aeaf7fbd02a800fdc64b73fe2204dd2c8ae66d22d9d5ad5d"
+"checksum redox_termios 0.1.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "7e891cfe48e9100a70a3b6eb652fef28920c117d366339687bd5576160db0f76"
+"checksum regex 1.1.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "37e7cbbd370869ce2e8dff25c7018702d10b21a20ef7135316f8daecd6c25b7f"
+"checksum regex-syntax 0.6.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "4e47a2ed29da7a9e1960e1639e7a982e6edc6d49be308a3b02daf511504a16d1"
+"checksum route-recognizer 0.1.12 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "cf3255338088df8146ba63d60a9b8e3556f1146ce2973bc05a75181a42ce2256"
+"checksum router 0.6.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "dc63b6f3b8895b0d04e816b2b1aa58fdba2d5acca3cbb8f0ab8e017347d57397"
+"checksum ryu 0.2.7 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "eb9e9b8cde282a9fe6a42dd4681319bfb63f121b8a8ee9439c6f4107e58a46f7"
+"checksum safemem 0.3.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "8dca453248a96cb0749e36ccdfe2b0b4e54a61bfef89fb97ec621eb8e0a93dd9"
+"checksum schannel 0.1.14 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "0e1a231dc10abf6749cfa5d7767f25888d484201accbd919b66ab5413c502d56"
+"checksum serde 1.0.80 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "15c141fc7027dd265a47c090bf864cf62b42c4d228bbcf4e51a0c9e2b0d3f7ef"
+"checksum serde_derive 1.0.80 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "225de307c6302bec3898c51ca302fc94a7a1697ef0845fcee6448f33c032249c"
+"checksum serde_json 1.0.33 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "c37ccd6be3ed1fdf419ee848f7c758eb31b054d7cd3ae3600e3bae0adf569811"
+"checksum sha2 0.8.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "7b4d8bfd0e469f417657573d8451fb33d16cfe0989359b93baf3a1ffc639543d"
+"checksum siphasher 0.2.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "0b8de496cf83d4ed58b6be86c3a275b8602f6ffe98d3024a869e124147a9a3ac"
+"checksum socket2 0.3.8 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "c4d11a52082057d87cb5caa31ad812f4504b97ab44732cd8359df2e9ff9f48e7"
+"checksum strsim 0.7.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "bb4f380125926a99e52bc279241539c018323fab05ad6368b56f93d9369ff550"
+"checksum syn 0.15.22 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "ae8b29eb5210bc5cf63ed6149cbf9adfc82ac0be023d8735c176ee74a2db4da7"
+"checksum term 0.5.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "5e6b677dd1e8214ea1ef4297f85dbcbed8e8cdddb561040cc998ca2551c37561"
+"checksum termcolor 1.0.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "4096add70612622289f2fdcdbd5086dc81c1e2675e6ae58d6c4f62a16c6d7f2f"
+"checksum termion 1.5.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "689a3bdfaab439fd92bc87df5c4c78417d3cbe537487274e9b0b2dce76e92096"
+"checksum textwrap 0.10.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "307686869c93e71f94da64286f9a9524c0f308a9e1c87a583de8e9c9039ad3f6"
+"checksum thread_local 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "c6b53e329000edc2b34dbe8545fd20e55a333362d0a321909685a19bd28c3f1b"
+"checksum time 0.1.40 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "d825be0eb33fda1a7e68012d51e9c7f451dc1a69391e7fdc197060bb8c56667b"
+"checksum toml 0.4.9 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "19782e145d5abefb03758958f06ea35f7b1d8421b534140e0238fd3d0bfd66e3"
+"checksum traitobject 0.1.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "efd1f82c56340fdf16f2a953d7bda4f8fdffba13d93b00844c25572110b26079"
+"checksum typeable 0.1.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "1410f6f91f21d1612654e7cc69193b0334f909dcf2c790c4826254fbb86f8887"
+"checksum typemap 0.3.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "653be63c80a3296da5551e1bfd2cca35227e13cdd08c6668903ae2f4f77aa1f6"
+"checksum typenum 1.10.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "612d636f949607bdf9b123b4a6f6d966dedf3ff669f7f045890d3a4a73948169"
+"checksum ucd-util 0.1.3 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "535c204ee4d8434478593480b8f86ab45ec9aae0e83c568ca81abf0fd0e88f86"
+"checksum unicase 1.4.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "7f4765f83163b74f957c797ad9253caf97f103fb064d3999aea9568d09fc8a33"
+"checksum unicode-bidi 0.3.4 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "49f2bd0c6468a8230e1db229cff8029217cf623c767ea5d60bfbd42729ea54d5"
+"checksum unicode-normalization 0.1.7 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "6a0180bc61fc5a987082bfa111f4cc95c4caff7f9799f3e46df09163a937aa25"
+"checksum unicode-width 0.1.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "882386231c45df4700b275c7ff55b6f3698780a650026380e72dabe76fa46526"
+"checksum unicode-xid 0.1.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "fc72304796d0818e357ead4e000d19c9c174ab23dc11093ac919054d20a6a7fc"
+"checksum unsafe-any 0.4.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "f30360d7979f5e9c6e6cea48af192ea8fab4afb3cf72597154b8f08935bc9c7f"
+"checksum url 1.7.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "dd4e7c0d531266369519a4aa4f399d748bd37043b00bde1e4ff1f60a120b355a"
+"checksum utf8-ranges 1.0.2 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "796f7e48bef87609f7ade7e06495a87d5cd06c7866e6a5cbfceffc558a243737"
+"checksum vcpkg 0.2.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "def296d3eb3b12371b2c7d0e83bfe1403e4db2d7a0bba324a12b21c4ee13143d"
+"checksum vec_map 0.8.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "05c78687fb1a80548ae3250346c3db86a80a7cdd77bda190189f2d0a0987c81a"
+"checksum version_check 0.1.5 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "914b1a6776c4c929a602fafd8bc742e06365d4bcbe48c30f9cca5824f70dc9dd"
+"checksum winapi 0.2.8 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "167dc9d6949a9b857f3451275e911c3f44255842c1f7a76f33c55103a909087a"
+"checksum winapi 0.3.6 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "92c1eb33641e276cfa214a0522acad57be5c56b10cb348b3c5117db75f3ac4b0"
+"checksum winapi-build 0.1.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "2d315eee3b34aca4797b2da6b13ed88266e6d612562a0c46390af8299fc699bc"
+"checksum winapi-i686-pc-windows-gnu 0.4.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6"
+"checksum winapi-util 0.1.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "afc5508759c5bf4285e61feb862b6083c8480aec864fa17a81fdec6f69b461ab"
+"checksum winapi-x86_64-pc-windows-gnu 0.4.0 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
+"checksum wincolor 1.0.1 (registry+git://mirrors.ustc.edu.cn/crates.io-index)" = "561ed901ae465d6185fa7864d63fbd5720d0ef718366c9a4dc83cf6170d7e9ba"

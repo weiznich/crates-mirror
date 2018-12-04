@@ -9,7 +9,7 @@
 #![cfg_attr(feature = "clippy", plugin(clippy))]
 #![cfg_attr(not(feature = "clippy"), allow(unknown_lints))]//ignore clippy lints on stable
 #![deny(warnings)]
-extern crate rustc_serialize;
+extern crate serde_json;
 extern crate router;
 extern crate iron;
 extern crate curl;
@@ -17,6 +17,8 @@ extern crate toml;
 extern crate git2;
 #[macro_use]
 extern crate log;
+#[macro_use]
+extern crate serde_derive;
 extern crate env_logger;
 extern crate sha2;
 extern crate clap;
@@ -27,9 +29,6 @@ use std::io::{BufWriter, Write, Read, BufReader, BufRead};
 use std::sync::{RwLock, Arc};
 use std::collections::HashSet;
 use std::time::Duration;
-use rustc_serialize::Decodable;
-use rustc_serialize::json;
-use rustc_serialize::hex::ToHex;
 
 use curl::easy::Easy;
 use git2::{Repository, Cred, CredentialType};
@@ -37,26 +36,26 @@ use sha2::{Digest, Sha256};
 use clap::{App, Arg};
 
 use iron::prelude::*;
-use iron::status::Status;
+use iron::status;
 use iron::modifiers::Redirect;
 use iron::Handler;
 use iron::Url;
 use router::Router;
 
-#[derive(Debug, RustcDecodable, Clone)]
+#[derive(Debug, Deserialize, Clone)]
 struct GitConfig {
     upstream_url: String,
     origin: Option<OriginConfig>,
 }
 
-#[derive(Debug, RustcDecodable, Clone)]
+#[derive(Debug, Deserialize, Clone)]
 struct OriginConfig {
     url: String,
     username: Option<String>,
     password: Option<String>,
 }
 
-#[derive(Debug, RustcDecodable, Clone)]
+#[derive(Debug, Deserialize, Clone)]
 struct Config {
     base_path: String,
     remote_api: String,
@@ -78,33 +77,11 @@ impl Config {
         };
         file.read_to_string(&mut config_toml)
             .unwrap_or_else(|err| panic!("Error while reading config: [{}]", err));
-        let mut parser = ::toml::Parser::new(&config_toml);
-        let toml = parser.parse();
-
-        if toml.is_none() {
-            for err in &parser.errors {
-                let (loline, locol) = parser.to_linecol(err.lo);
-                let (hiline, hicol) = parser.to_linecol(err.hi);
-                println!("{}:{}-{}:{} error: {}",
-                         loline,
-                         locol,
-                         hiline,
-                         hicol,
-                         err.desc);
-            }
-            panic!("Faild to load Configuration");
-        }
-        let toml = ::toml::Value::Table(toml.unwrap());
-
-        let mut decoder = ::toml::Decoder::new(toml);
-        match Config::decode(&mut decoder) {
-            Ok(c) => c,
-            Err(e) => panic!("failed to parse configuration {}", e),
-        }
+        toml::from_str(&config_toml).unwrap_or_else(|err| panic!("Error while parsing config: [{}]", err))
     }
 }
 
-#[derive(RustcDecodable)]
+#[derive(Deserialize)]
 struct IndexFile {
     vers: String,
     cksum: String,
@@ -112,7 +89,7 @@ struct IndexFile {
 
 impl IndexFile {
     fn from_line(l: Result<String, ::std::io::Error>) -> IndexFile {
-        json::decode(&l.unwrap()).unwrap()
+        serde_json::from_str(&l.unwrap()).unwrap()
     }
 }
 
@@ -158,7 +135,7 @@ impl Mirror {
                                       krate.name,
                                       krate.version))
             .unwrap();
-        Ok(Response::with((Status::TemporaryRedirect, Redirect(url))))
+        Ok(Response::with((status::TemporaryRedirect, Redirect(url))))
     }
 
     fn download(&self, krate: &Crate) {
@@ -274,14 +251,15 @@ impl Handler for Mirror {
             reader.read_to_end(&mut data).unwrap();
             let mut hasher = Sha256::new();
             hasher.input(&data);
-            if hasher.result().to_hex() != cksum {
+            let local_cksum = format!("{:x}", hasher.result());
+            if local_cksum != cksum {
                 warn!("Checksum of {:?} did not match ", krate);
-                debug!("{:?} vs {:?}", hasher.result().to_hex(), cksum);
+                debug!("{} vs {:?}", local_cksum, cksum);
                 ::std::fs::remove_file(base_dir).unwrap();
                 self.download(&krate);
                 self.redirect(&krate)
             } else {
-                Ok(Response::with((Status::Ok, data.as_slice())))
+                Ok(Response::with((status::Ok, data.as_slice())))
             }
         } else {
             self.download(&krate);
@@ -291,7 +269,7 @@ impl Handler for Mirror {
 }
 
 fn main() {
-    env_logger::init().unwrap();
+    env_logger::init();
     let version: &str = &format!("{}.{}.{}",
                                  env!("CARGO_PKG_VERSION_MAJOR"),
                                  env!("CARGO_PKG_VERSION_MINOR"),
@@ -396,7 +374,7 @@ fn main() {
                  .unwrap_or(format!("file://{}", base_dir.to_str().unwrap())));
 
     Iron::new(router)
-        .http(url)
+        .http("localhost:3000")
         .unwrap();
 }
 
@@ -416,7 +394,7 @@ fn credentials(url: &str,
                -> Result<git2::Cred, git2::Error> {
     let mut error = git2::Error::from_str(&format!("Failed to find credentials for {}", url));
     debug!("credentials");
-    if cred.contains(CredentialType::from(git2::USER_PASS_PLAINTEXT)) {
+    if cred.contains(CredentialType::USER_PASS_PLAINTEXT) {
         if let (&Some(ref u), &Some(ref p)) = (&origin_config.username, &origin_config.password) {
             debug!("from username/password");
             match Cred::userpass_plaintext(u, p) {
@@ -431,7 +409,7 @@ fn credentials(url: &str,
             }
         }
     }
-    if cred.contains(CredentialType::from(git2::DEFAULT)) {
+    if cred.contains(CredentialType::DEFAULT) {
         let config = try!(git2::Config::open_default());
         match Cred::credential_helper(&config, url, user_from_url) {
             Err(e) => {
@@ -444,7 +422,7 @@ fn credentials(url: &str,
             }
         }
     }
-    if cred.contains(CredentialType::from(git2::SSH_KEY)) {
+    if cred.contains(CredentialType::SSH_KEY) {
         if let Some(user) = user_from_url {
             debug!("from ssh agent");
             match Cred::ssh_key_from_agent(user) {

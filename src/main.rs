@@ -5,9 +5,6 @@
 // <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
-#![cfg_attr(feature = "clippy", feature(plugin))]
-#![cfg_attr(feature = "clippy", plugin(clippy))]
-#![cfg_attr(not(feature = "clippy"), allow(unknown_lints))]//ignore clippy lints on stable
 #![deny(warnings)]
 extern crate serde_json;
 extern crate router;
@@ -73,7 +70,7 @@ impl Config {
 
         let mut file = match File::open(&path) {
             Ok(file) => file,
-            Err(_) => panic!("Could not find config file {}!", path),
+            Err(_e) => panic!("Could not find config file {}!", path),
         };
         file.read_to_string(&mut config_toml)
             .unwrap_or_else(|err| panic!("Error while reading config: [{}]", err));
@@ -357,7 +354,7 @@ fn main() {
     let mirror = Mirror {
         remote_api: config.remote_api,
         crates_path: base_path,
-        index_path: index_path,
+        index_path,
         active_downloads: Arc::new(RwLock::new(HashSet::new())),
     };
     let mut router = Router::new();
@@ -371,7 +368,7 @@ fn main() {
                  .origin
                  .map(|o| o.url)
                  .clone()
-                 .unwrap_or(format!("file://{}", base_dir.to_str().unwrap())));
+                 .unwrap_or_else(|| format!("file://{}", base_dir.to_str().unwrap())));
 
     Iron::new(router)
         .http(url)

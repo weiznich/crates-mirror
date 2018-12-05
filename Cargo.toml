@@ -27,7 +27,6 @@ serde_derive = "1.0"
 serde_json = "1.0"
 sha2 = "0.8"
 toml = "0.4"
-clippy = {version= "0.0.302", optional = true}
 
 
 [features]

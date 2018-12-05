@@ -3,7 +3,7 @@ language: rust
 cache: cargo
 rust:
   - nightly
-  - nightly-2016-10-18
+  - nightly-2018-12-04
   - beta
   - stable
 matrix:
@@ -12,9 +12,10 @@ matrix:
 script:
   - |
     if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
-        cargo build --verbose --features="clippy"
+        cargo clippy
+        cargo build --verbose
     else
-        cargo build --verbose 
+        cargo build --verbose
     fi
 addons:
   apt:

@@ -63,9 +63,6 @@ struct Config {
 
 impl Config {
     pub fn from_file(path: &str) -> Config {
-        use std::fs::File;
-        use std::io::Read;
-
         let mut config_toml = String::new();
 
         let mut file = match File::open(&path) {

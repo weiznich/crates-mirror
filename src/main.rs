@@ -6,35 +6,35 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 #![deny(warnings)]
-extern crate serde_json;
-extern crate router;
-extern crate iron;
 extern crate curl;
-extern crate toml;
 extern crate git2;
+extern crate iron;
+extern crate router;
+extern crate serde_json;
+extern crate toml;
 #[macro_use]
 extern crate log;
 #[macro_use]
 extern crate serde_derive;
+extern crate clap;
 extern crate env_logger;
 extern crate sha2;
-extern crate clap;
 
-use std::path::PathBuf;
-use std::fs::{create_dir_all, File};
-use std::io::{BufWriter, Write, Read, BufReader, BufRead};
-use std::sync::{RwLock, Arc};
 use std::collections::HashSet;
+use std::fs::{create_dir_all, File};
+use std::io::{BufRead, BufReader, BufWriter, Read, Write};
+use std::path::PathBuf;
+use std::sync::{Arc, RwLock};
 use std::time::Duration;
 
-use curl::easy::Easy;
-use git2::{Repository, Cred, CredentialType};
-use sha2::{Digest, Sha256};
 use clap::{App, Arg};
+use curl::easy::Easy;
+use git2::{Cred, CredentialType, Repository};
+use sha2::{Digest, Sha256};
 
+use iron::modifiers::Redirect;
 use iron::prelude::*;
 use iron::status;
-use iron::modifiers::Redirect;
 use iron::Handler;
 use iron::Url;
 use router::Router;
@@ -71,7 +71,8 @@ impl Config {
         };
         file.read_to_string(&mut config_toml)
             .unwrap_or_else(|err| panic!("Error while reading config: [{}]", err));
-        toml::from_str(&config_toml).unwrap_or_else(|err| panic!("Error while parsing config: [{}]", err))
+        toml::from_str(&config_toml)
+            .unwrap_or_else(|err| panic!("Error while parsing config: [{}]", err))
     }
 }
 
@@ -93,10 +94,13 @@ struct Crate {
     version: String,
 }
 
-
 impl Crate {
     fn get_index_file(&self, mut index: PathBuf) -> File {
-        let name = self.name.chars().flat_map(|c| c.to_lowercase()).collect::<String>();
+        let name = self
+            .name
+            .chars()
+            .flat_map(|c| c.to_lowercase())
+            .collect::<String>();
         match name.len() {
             e if e > 3 => {
                 index.push(&self.name[0..2]);
@@ -124,11 +128,11 @@ struct Mirror {
 impl Mirror {
     fn redirect(&self, krate: &Crate) -> IronResult<Response> {
         debug!("redirect to {:?}", krate);
-        let url = Url::parse(&format!("{}/api/v1/crates/{}/{}/download",
-                                      self.remote_api,
-                                      krate.name,
-                                      krate.version))
-            .unwrap();
+        let url = Url::parse(&format!(
+            "{}/api/v1/crates/{}/{}/download",
+            self.remote_api, krate.name, krate.version
+        ))
+        .unwrap();
         Ok(Response::with((status::TemporaryRedirect, Redirect(url))))
     }
 
@@ -158,17 +162,17 @@ impl Mirror {
         let file = File::create(base_dir).unwrap();
         let mut writer = BufWriter::new(file);
         let mut handle = Easy::new();
-        let url = format!("{}/api/v1/crates/{}/{}/download",
-                        self.remote_api,
-                        krate.name,
-            krate.version,);
+        let url = format!(
+            "{}/api/v1/crates/{}/{}/download",
+            self.remote_api, krate.name, krate.version,
+        );
         debug!("try to download {:?} from {}", krate, url);
-        handle.url(&url)
-            .unwrap();
+        handle.url(&url).unwrap();
         handle.follow_location(true).unwrap();
         {
             let mut transfer = handle.transfer();
-            transfer.write_function(|data| {
+            transfer
+                .write_function(|data| {
                     debug!("get part of {:?}", krate);
                     Ok(writer.write(data).unwrap())
                 })
@@ -176,10 +180,10 @@ impl Mirror {
             match transfer.perform() {
                 Ok(_) => {}
                 Err(e) => {
-                    warn!("fetch of {:?} failed because {:?}! retry {}",
-                          krate,
-                          e,
-                          retry_count);
+                    warn!(
+                        "fetch of {:?} failed because {:?}! retry {}",
+                        krate, e, retry_count
+                    );
                     {
                         let mut l = self.active_downloads.write().unwrap();
                         l.remove(&krate);
@@ -199,13 +203,15 @@ impl Mirror {
 
 impl Handler for Mirror {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        let crate_name = req.extensions
+        let crate_name = req
+            .extensions
             .get::<Router>()
             .unwrap()
             .find("name")
             .unwrap_or("/")
             .to_string();
-        let crate_version = req.extensions
+        let crate_version = req
+            .extensions
             .get::<Router>()
             .unwrap()
             .find("version")
@@ -230,12 +236,12 @@ impl Handler for Mirror {
         }
         if base_dir.exists() {
             let f = BufReader::new(krate.get_index_file(self.index_path.clone()));
-            let cksum = f.lines()
+            let cksum = f
+                .lines()
                 .map(IndexFile::from_line)
                 .find(|i| i.vers == krate.version)
                 .map(|i| i.cksum)
                 .unwrap();
-
 
             debug!("load cached file");
             base_dir.push("download");
@@ -264,21 +270,25 @@ impl Handler for Mirror {
 
 fn main() {
     env_logger::init();
-    let version: &str = &format!("{}.{}.{}",
-                                 env!("CARGO_PKG_VERSION_MAJOR"),
-                                 env!("CARGO_PKG_VERSION_MINOR"),
-                                 env!("CARGO_PKG_VERSION_PATCH"));
+    let version: &str = &format!(
+        "{}.{}.{}",
+        env!("CARGO_PKG_VERSION_MAJOR"),
+        env!("CARGO_PKG_VERSION_MINOR"),
+        env!("CARGO_PKG_VERSION_PATCH")
+    );
     let matches = App::new("Crates Mirror")
         .version(version)
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(env!("CARGO_PKG_DESCRIPTION"))
-        .arg(Arg::with_name("config")
-            .short("c")
-            .long("config")
-            .required(true)
-            .value_name("FILE")
-            .help("Sets a config file")
-            .takes_value(true))
+        .arg(
+            Arg::with_name("config")
+                .short("c")
+                .long("config")
+                .required(true)
+                .value_name("FILE")
+                .help("Sets a config file")
+                .takes_value(true),
+        )
         .get_matches();
     let config = Config::from_file(matches.value_of("config").unwrap());
     let mut base_dir = PathBuf::from(config.base_path.clone());
@@ -288,22 +298,25 @@ fn main() {
     let url: &str = &config.listen_on.clone();
     base_dir.push("index");
     let repo = if !base_dir.exists() {
-        let repo = Repository::clone(&config.registry_config.upstream_url, base_dir.clone())
-            .unwrap();
+        let repo =
+            Repository::clone(&config.registry_config.upstream_url, base_dir.clone()).unwrap();
         {
             let mut config_file_path = base_dir.clone();
             config_file_path.push("config.json");
             let mut config_file = File::create(config_file_path.clone()).unwrap();
-            write!(&mut config_file,
-                   "{{\"dl\": \"http://{url}/api/v1/crates\", \"api\": \"http://{url}\"}}",
-                   url = url)
-                .unwrap();
+            write!(
+                &mut config_file,
+                "{{\"dl\": \"http://{url}/api/v1/crates\", \"api\": \"http://{url}\"}}",
+                url = url
+            )
+            .unwrap();
 
             let repo_path = repo.workdir().unwrap();
             // git add $file
             let mut index = repo.index().unwrap();
             let mut repo_path = repo_path.iter();
-            let dst = config_file_path.iter()
+            let dst = config_file_path
+                .iter()
                 .skip_while(|s| Some(*s) == repo_path.next())
                 .collect::<PathBuf>();
             index.add_path(&dst).unwrap();
@@ -315,14 +328,15 @@ fn main() {
             let head = repo.head().unwrap();
             let parent = repo.find_commit(head.target().unwrap()).unwrap();
             let sig = repo.signature().unwrap();
-            repo.commit(Some("HEAD"),
-                        &sig,
-                        &sig,
-                        "Add local mirror",
-                        &tree,
-                        &[&parent])
-                .unwrap();
-
+            repo.commit(
+                Some("HEAD"),
+                &sig,
+                &sig,
+                "Add local mirror",
+                &tree,
+                &[&parent],
+            )
+            .unwrap();
 
             if let Some(ref remote) = config.registry_config.origin {
                 let mut callbacks = git2::RemoteCallbacks::new();
@@ -332,7 +346,9 @@ fn main() {
                 let mut remote = repo.find_remote("local").unwrap();
                 let mut opts = git2::PushOptions::new();
                 opts.remote_callbacks(callbacks);
-                remote.push(&["refs/heads/master"], Some(&mut opts)).unwrap();
+                remote
+                    .push(&["refs/heads/master"], Some(&mut opts))
+                    .unwrap();
             }
         }
         repo
@@ -355,37 +371,42 @@ fn main() {
         active_downloads: Arc::new(RwLock::new(HashSet::new())),
     };
     let mut router = Router::new();
-    router.get("/api/v1/crates/:name/:version/download",
-               mirror,
-               "get-crate");
+    router.get(
+        "/api/v1/crates/:name/:version/download",
+        mirror,
+        "get-crate",
+    );
 
     debug!("startup finished");
-    println!("finish to setup crates.io mirror. Point cargo repository to {}",
-             config.registry_config
-                 .origin
-                 .map(|o| o.url)
-                 .clone()
-                 .unwrap_or_else(|| format!("file://{}", base_dir.to_str().unwrap())));
+    println!(
+        "finish to setup crates.io mirror. Point cargo repository to {}",
+        config
+            .registry_config
+            .origin
+            .map(|o| o.url)
+            .clone()
+            .unwrap_or_else(|| format!("file://{}", base_dir.to_str().unwrap()))
+    );
 
-    Iron::new(router)
-        .http(url)
-        .unwrap();
+    Iron::new(router).http(url).unwrap();
 }
 
 fn progress_monitor(progress: git2::Progress) -> bool {
-    debug!("total :{}, local: {}, remote: {}",
-           progress.total_objects(),
-           progress.local_objects(),
-           progress.received_objects());
+    debug!(
+        "total :{}, local: {}, remote: {}",
+        progress.total_objects(),
+        progress.local_objects(),
+        progress.received_objects()
+    );
     true
 }
 
-
-fn credentials(url: &str,
-               user_from_url: Option<&str>,
-               cred: git2::CredentialType,
-               origin_config: &OriginConfig)
-               -> Result<git2::Cred, git2::Error> {
+fn credentials(
+    url: &str,
+    user_from_url: Option<&str>,
+    cred: git2::CredentialType,
+    origin_config: &OriginConfig,
+) -> Result<git2::Cred, git2::Error> {
     let mut error = git2::Error::from_str(&format!("Failed to find credentials for {}", url));
     debug!("credentials");
     if cred.contains(CredentialType::USER_PASS_PLAINTEXT) {
@@ -404,7 +425,7 @@ fn credentials(url: &str,
         }
     }
     if cred.contains(CredentialType::DEFAULT) {
-        let config = try!(git2::Config::open_default());
+        let config = git2::Config::open_default()?;
         match Cred::credential_helper(&config, url, user_from_url) {
             Err(e) => {
                 debug!("Error: {:?}", e);
@@ -435,10 +456,11 @@ fn credentials(url: &str,
 }
 
 fn poll_index(repo: Repository, config: Config) {
-
     let mut origin = repo.find_remote("origin").unwrap();
     loop {
-        ::std::thread::sleep(Duration::from_secs(config.poll_intervall.unwrap_or(60) as u64));
+        ::std::thread::sleep(Duration::from_secs(
+            config.poll_intervall.unwrap_or(60) as u64
+        ));
         'retry: for i in 0..20 {
             match try_merge(&repo, &config, &mut origin) {
                 Ok(()) => break 'retry,
@@ -451,48 +473,49 @@ fn poll_index(repo: Repository, config: Config) {
             }
         }
     }
-
 }
 
-fn try_merge(repo: &Repository,
-             config: &Config,
-             origin: &mut git2::Remote)
-             -> Result<(), git2::Error> {
-    try!(origin.fetch(&["master"], None, None));
-    let head = try!(repo.head());
+fn try_merge(
+    repo: &Repository,
+    config: &Config,
+    origin: &mut git2::Remote,
+) -> Result<(), git2::Error> {
+    origin.fetch(&["master"], None, None)?;
+    let head = repo.head()?;
 
-    let parent = try!(repo.find_commit(head.target().unwrap()));
-    let remote = try!(repo.find_reference("refs/remotes/origin/master"));
-    let c = try!(repo.reference_to_annotated_commit(&remote));
+    let parent = repo.find_commit(head.target().unwrap())?;
+    let remote = repo.find_reference("refs/remotes/origin/master")?;
+    let c = repo.reference_to_annotated_commit(&remote)?;
     let mut checkout = ::git2::build::CheckoutBuilder::new();
     let mut merge_option = ::git2::MergeOptions::new();
-    let mut index = try!(repo.index());
-    let old_tree = try!(repo.find_tree(try!(index.write_tree())));
-    try!(repo.merge(&[&c],
-                    Some(merge_option.file_favor(::git2::FileFavor::Theirs)),
-                    Some(checkout.force())));
-    try!(index.write());
-    let tree_id = try!(index.write_tree());
-    let tree = try!(repo.find_tree(tree_id));
-    let diff = try!(repo.diff_tree_to_tree(Some(&old_tree), Some(&tree), None));
-    if try!(diff.stats()).files_changed() > 0 {
-
-        let sig = try!(repo.signature());
-        try!(repo.commit(Some("HEAD"), &sig, &sig, "Merge", &tree, &[&parent]));
+    let mut index = repo.index()?;
+    let old_tree = repo.find_tree(index.write_tree()?)?;
+    repo.merge(
+        &[&c],
+        Some(merge_option.file_favor(::git2::FileFavor::Theirs)),
+        Some(checkout.force()),
+    )?;
+    index.write()?;
+    let tree_id = index.write_tree()?;
+    let tree = repo.find_tree(tree_id)?;
+    let diff = repo.diff_tree_to_tree(Some(&old_tree), Some(&tree), None)?;
+    if diff.stats()?.files_changed() > 0 {
+        let sig = repo.signature()?;
+        repo.commit(Some("HEAD"), &sig, &sig, "Merge", &tree, &[&parent])?;
 
         if let Some(ref remote) = config.registry_config.origin {
             let mut callbacks = git2::RemoteCallbacks::new();
             callbacks.credentials(|url, user, cred| credentials(url, user, cred, remote));
             callbacks.transfer_progress(progress_monitor);
-            let mut remote = try!(repo.find_remote("local"));
+            let mut remote = repo.find_remote("local")?;
             let mut opts = git2::PushOptions::new();
             opts.remote_callbacks(callbacks);
-            try!(remote.push(&["refs/heads/master"], Some(&mut opts)));
+            remote.push(&["refs/heads/master"], Some(&mut opts))?;
         }
         debug!("updated index");
     } else {
         trace!("Nothing to update");
-        try!(repo.cleanup_state());
+        repo.cleanup_state()?;
     }
     Ok(())
 }

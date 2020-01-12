@@ -3,7 +3,6 @@ language: rust
 cache: cargo
 rust:
   - nightly
-  - nightly-2018-12-04
   - beta
   - stable
 matrix:

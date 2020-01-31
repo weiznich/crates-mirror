@@ -57,6 +57,7 @@ struct Config {
     base_path: String,
     remote_api: String,
     listen_on: String,
+    publish_url: String,
     registry_config: GitConfig,
     poll_intervall: Option<i32>,
 }
@@ -295,7 +296,8 @@ fn main() {
     if !base_dir.exists() {
         create_dir_all(base_dir.clone()).unwrap();
     }
-    let url: &str = &config.listen_on.clone();
+    let url: &str = &std::env::var("PUBLISH_URL").unwrap_or(config.publish_url.clone());
+    let listen_on: &str = &config.listen_on.clone();
     base_dir.push("index");
     let repo = if !base_dir.exists() {
         let repo =
@@ -306,7 +308,7 @@ fn main() {
             let mut config_file = File::create(config_file_path.clone()).unwrap();
             write!(
                 &mut config_file,
-                "{{\"dl\": \"http://{url}/api/v1/crates\", \"api\": \"http://{url}\"}}",
+                "{{\"dl\": \"{url}/api/v1/crates\", \"api\": \"{url}\"}}",
                 url = url
             )
             .unwrap();
@@ -388,7 +390,7 @@ fn main() {
             .unwrap_or_else(|| format!("file://{}", base_dir.to_str().unwrap()))
     );
 
-    Iron::new(router).http(url).unwrap();
+    Iron::new(router).http(listen_on).unwrap();
 }
 
 fn progress_monitor(progress: git2::Progress) -> bool {
